@@ -133,7 +133,15 @@ write.csv(df.VIs_final,paste0("./data/MODIS/VIs/df_VIs.filtered.csv"))
 #---------------
 #3.plotting
 #---------------
+#test#
 df.VIs_final %>%
+  filter(sitename=="QS")%>%
+  ggplot()+
+  geom_point(aes(x=date,y=NDVI,col="NDVI"))+
+  geom_point(aes(x=date,y=NDVI.filtered,col="filtered"))
+
+df.VIs_final %>%
+  # filter(sitename=="QS")%>%
   group_by(sitename)%>%
   ggplot()+
   geom_point(aes(x=date,y=NDVI,col="NDVI"))+

@@ -48,6 +48,13 @@ for (i in 1:length(sites)) {
   t45<-left_join(t34,df_B5)
   t56<-left_join(t45,df_B6)
   temp<-left_join(t56,df_B7)
+  #change the format of data.frame:characters-->numeric
+  temp[,2:ncol(temp)]<-as.data.frame(apply(temp[,2:ncol(temp)],2,as.numeric))
+  if(i==23){
+    #pay attention-->remove the strange date "0202--"
+    pos<-grep("0202",temp$date)
+    temp<-temp[-pos,]
+  }
   #using the bands to calculate the VIs: NDVI and EVI-->according to Walther et al., 2021:
   #using mean to calculate VIs:
   NDVI<-c(temp$B2 - temp$B1)/c(temp$B2 + temp$B1)
@@ -65,7 +72,7 @@ write.csv(df_VIs,paste0("./data/MODIS/VIs/df_VIs.csv"))
 #test:
 library(ggplot2)
 df_VIs%>%
-  filter(sitename=="TLG")%>%
+  filter(sitename=="QS")%>%
   ggplot()+
     geom_point(aes(x=date,y=NDVI,col="NDVI"))+
     geom_point(aes(x=date,y=EVI,col="EVI"))
