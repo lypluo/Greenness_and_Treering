@@ -69,8 +69,8 @@ rm_outliers<-function(df,VI.name) {
     }
     if(VI.name=="EVI"){
       df_t$EVI.filtered<-df_t$EVI
-      #a. remove the NDVI outlier below 0.05(absolute values)
-      df_t$EVI.filtered[df_t$EVI.filtered<0.05]<-NA
+      #a. remove the NDVI outlier below 0.05(absolute values) and higher than 0.8
+      df_t$EVI.filtered[df_t$EVI.filtered<0.05 | df_t$EVI.filtered>0.8]<-NA
       #b.remove the outlier according to annual Prec and Temp
       Prec<-unique(df_t$Prec)
       Ta<-unique(df_t$Ta)
@@ -137,8 +137,11 @@ write.csv(df.VIs_final,paste0("./data/MODIS/VIs/df_VIs.filtered.csv"))
 df.VIs_final %>%
   filter(sitename=="QS")%>%
   ggplot()+
-  geom_point(aes(x=date,y=NDVI,col="NDVI"))+
-  geom_point(aes(x=date,y=NDVI.filtered,col="filtered"))
+  # geom_point(aes(x=date,y=NDVI,col="NDVI"))+
+  # geom_point(aes(x=date,y=NDVI.filtered,col="filtered"))+
+  geom_point(aes(x=date,y=EVI,col="EVI"))+
+  geom_point(aes(x=date,y=EVI.filtered,col="filtered"))
+
 
 df.VIs_final %>%
   # filter(sitename=="QS")%>%

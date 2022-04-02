@@ -55,7 +55,7 @@ view_ts<-function(df,site){
 }
 #
 sites<-unique(df.VIs$sitename)
-i=20
+i=2
 view_ts(df.VIs,sites[i])
 ##after checking all the sites, that all the sites
 #has the same extraction period: 2000-2021(22 years)-->except the site LS
@@ -67,7 +67,7 @@ view_ts(df.VIs,sites[i])
 source(paste0("./R/pheno_extraction_fun2.R"))
 extract_phenos<-function(df,site){
   # df<-df.VIs
-  # site<-"LS"
+  # site<-"QS"
 
   df.sel<-df %>%
     filter(sitename==site)%>%
@@ -108,7 +108,33 @@ for (i in 1:length(sites)) {
   phenos<-extract_phenos(df.VIs,sites[i])
   Phenos.final<-rbind(Phenos.final,phenos)
 }
+
+#------------------------------
+#b. some adjustment for SOS25
+#if SOS25<60, subsitute for mean of SOS25 in that site
+# to note, this mainly for site "QS", for other sits the PTDs generally works well.
+#------------------------------
+Phenos.final<-read.csv("./data/MODIS/Phenology/Pheno_DoY_updated_YP.csv")
+Phenos.final<-Phenos.final[,-1]
+#
+Phenos.final<-Phenos.final%>%
+  group_by(sitename)%>%
+  mutate(trs_sos25=ifelse(trs_sos25<60,NA,trs_sos25),
+         trs_sos50=ifelse(trs_sos50<90,NA,trs_sos50))
+#mean of phenos
+Phenos.mean<-Phenos.final %>%
+  group_by(sitename)%>%
+  dplyr::summarise(trs_sos25_mean=round(mean(trs_sos25,na.rm=T),0),
+                   trs_sos50_mean=round(mean(trs_sos50,na.rm=T),0)
+                   )
+#
+Phenos.final_new<-left_join(Phenos.final,Phenos.mean,by="sitename")
+Phenos.final_new<-Phenos.final_new %>%
+  group_by(sitename)%>%
+  mutate(trs_sos25=ifelse(!is.na(trs_sos25),trs_sos25,trs_sos25_mean),
+         trs_sos50=ifelse(!is.na(trs_sos50),trs_sos50,trs_sos50_mean)
+         )
 #----------------------
 #save the data
 #----------------------
-write.csv(Phenos.final,file=paste0("./data/MODIS/Phenology/Pheno_DoY_updated_YP.csv"))
+write.csv(Phenos.final_new,file=paste0("./data/MODIS/Phenology/Pheno_DoY_updated_YP.csv"))

@@ -1,7 +1,8 @@
 #------------------------------
 #Aim:comparison between SOS from by MODIS and sos extracted by YP:
 #------------------------------
-
+library(dplyr)
+library(tidyverse)
 #-----------
 #(1)load the data:
 #-----------
@@ -21,10 +22,13 @@ t2<-YP.phenos %>%
 df.merge<-left_join(t1,t2,by=c("sitename","year"))
 
 #for sos25-greenup
-ggplot(data=df.merge,aes(x=greenup,y=trs_sos25,col=sitename))+
+df.merge %>%
+  group_by(sitename)%>%
+  ggplot(aes(x=greenup,y=trs_sos25))+
   geom_point()+
   geom_smooth(method = "lm")+
-  geom_abline(slope = 1,intercept = 0,lty=2)
+  geom_abline(slope = 1,intercept = 0,lty=2)+
+  facet_wrap(~sitename)
 lm_coefs<-round(coef(lm(trs_sos25~greenup,data = df.merge)),2)
 ggplot(data=df.merge,aes(x=greenup,y=trs_sos25,col=sitename))+
   geom_point()+

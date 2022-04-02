@@ -45,10 +45,10 @@ prod.ad1<-function(deri)
 
 SplinePheno_extraction<-function(data_ts,site.name,VI_name,do_norm,year){
   # data_ts<-df.ts
-  # site.name<-"LS"
+  # site.name<-"CLS"
   # VI_name<-"EVI"
   # do_norm<-FALSE
-  # year<-2000
+  # year<-2009
 
   #
   proc.ts<-data_ts %>%
@@ -62,7 +62,8 @@ SplinePheno_extraction<-function(data_ts,site.name,VI_name,do_norm,year){
   real_time<-proc.VIs$date
 
   #for selected VI name
-  ts<-proc.VIs[,VI_name]
+  proc.names<-paste0(VI_name,".filtered")
+  ts<-proc.VIs[,proc.names]
 
   #convert the date format to zoo
   ts<-zoo(ts,order.by = proc.VIs$doy)
