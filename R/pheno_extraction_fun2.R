@@ -187,6 +187,7 @@ SplinePheno_extraction<-function(data_ts,site.name,VI_name,do_norm,year){
     trs_sos75<-15+which.min(as.numeric(abs(trs_75_sos_value - ts_sm[15:pop])))
     trs_eos75<-pop+which.min(as.numeric(abs(trs_75_eos_value - ts_sm[pop:length(ts_sm)])))-1
     trs_eos25<-pop+which.min(as.numeric(abs(trs_25_eos_value - ts_sm[pop:length(ts_sm)])))-1
+
     #set a crition to filter the pseduo trs25,trs75
     #if the minimum residual between trs_critrion and trs_sm bigger than
     #0.1*ampl, then set the trs50<-NA
