@@ -28,23 +28,6 @@ final.VIs %>%
   geom_point(aes(x=date,y=NDVI))+
   facet_wrap(.~Site)
 
-#------------------
-#(2)filter the data-->e.g. remove the contamination of the snow
-#------------------
-
-
-
-#------------------
-#(3)gapfilling the data
-#------------------
-
-
-
-
-
-
-
-
 #save the data:
 save.path<-"./data/GIMMS/VIs/"
 write.csv(final.VIs,file = paste0(save.path,"GIMMS_NDVI3g.csv"))
