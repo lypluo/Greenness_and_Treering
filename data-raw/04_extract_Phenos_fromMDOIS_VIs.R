@@ -55,7 +55,7 @@ view_ts<-function(df,site){
 }
 #
 sites<-unique(df.VIs$sitename)
-i=2
+i=1
 view_ts(df.VIs,sites[i])
 ##after checking all the sites, that all the sites
 #has the same extraction period: 2000-2021(22 years)-->except the site LS
